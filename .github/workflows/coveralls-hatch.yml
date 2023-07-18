@@ -1,4 +1,4 @@
-name: publish with hatch
+name: coveralls with hatch
 
 on:
   workflow_call:
@@ -7,21 +7,17 @@ on:
         required: true
         type: string
         default: "3.10"
-      hatch-index-repo:
-        required: true
-        type: string
-        default: "test"
     secrets:
-      hatch-index-auth:
+      coveralls-repo-token:
         required: true
 
 jobs:
-  publish:
+  coveralls:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python ${{ inputs.python-version }}
+      - name: Set up Python ${{ input.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ inputs.python-version }}
@@ -33,16 +29,16 @@ jobs:
 
       - name: Create environment
         run: |
-          hatch env create build
+          hatch env create test
 
-      - name: Build package
+      - name: Run coverage
         run: |
-          hatch -e build build
+          hatch run test:coverage run -m pytest
+          hatch run test:coverage json
+          hatch run test:coverage report
 
-      - name: Publish package
+      - name: Upload to coveralls
         env:
-          HATCH_INDEX_REPO: ${{ inputs.hatch-index-repo }}
-          HATCH_INDEX_USER: __token__
-          HATCH_INDEX_AUTH: ${{ secrets.hatch-index-auth }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.coveralls-repo-token }}
         run: |
-          hatch -e build publish
+          hatch run test:coveralls --service=github
