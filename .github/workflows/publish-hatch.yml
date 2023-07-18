@@ -1,0 +1,48 @@
+name: build + publish with hatch
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+        default: "3.10"
+      hatch-index-repo:
+        required: true
+        type: string
+        default: "test"
+    secrets:
+      hatch-index-auth:
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ inputs.config-path }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ inputs.config-path }}
+
+      - name: Install dependencies
+        run: |
+          pip install --no-cache-dir --upgrade pip
+          pip install --no-cache-dir hatch
+
+      - name: Create environment
+        run: |
+          hatch env create build
+
+      - name: Build package
+        run: |
+          hatch -e build build
+
+      - name: Publish package
+        env:
+          HATCH_INDEX_REPO: ${{ inputs.hatch-index-repo }}
+          HATCH_INDEX_USER: __token__
+          HATCH_INDEX_AUTH: ${{ secrets.hatch-index-auth }}
+        run: |
+          hatch -e build publish
