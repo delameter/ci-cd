@@ -33,12 +33,12 @@ jobs:
 
       - name: Run coverage
         run: |
-          hatch run test:coverage run -m pytest
-          hatch run test:coverage json
-          hatch run test:coverage report
+          hatch run -v test:coverage run -m pytest
+          hatch run -v test:coverage json
+          hatch run -v test:coverage report
 
       - name: Upload to coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.coveralls-repo-token }}
         run: |
-          hatch run test:coveralls --service=github
+          hatch run -v test:coveralls --service=github

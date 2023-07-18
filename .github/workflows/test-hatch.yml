@@ -36,7 +36,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          hatch run test:pytest --junitxml=junit/test-results-${{ inputs.python-version }}.xml
+          hatch run -v test:pytest --junitxml=junit/test-results-${{ inputs.python-version }}.xml
 
       - name: Upload pytest test results
         if: ${{ always() }}  # to publish test results even when there are failures
