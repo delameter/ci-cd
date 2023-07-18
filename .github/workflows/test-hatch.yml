@@ -23,6 +23,7 @@ jobs:
         run: |
           pip install --no-cache-dir --upgrade pip
           pip install --no-cache-dir hatch
+          find . -maxdepth 1 -name "*.tar.gz" | xargs -r pip install --no-cache-dir
 
       - name: Create environment
         run: |
