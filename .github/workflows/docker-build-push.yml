@@ -4,11 +4,9 @@ on:
   workflow_call:
     inputs:
       registry:
-        required: true
         type: string
         default: "ghcr.io"
       image-name:
-        required: true
         type: string
         default: ${{ github.repository }}
     secrets:
