@@ -11,7 +11,7 @@ on:
         default: ${{ github.repository }}
       dockerfile:
         type: string
-        default: "docker/Dockerfile"
+        default: "Dockerfile"
     secrets:
       auth:
         required: true
