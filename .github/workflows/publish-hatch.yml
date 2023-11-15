@@ -45,4 +45,4 @@ jobs:
           HATCH_INDEX_USER: __token__
           HATCH_INDEX_AUTH: ${{ secrets.hatch-index-auth }}
         run: |
-          hatch -v -e build publish
+          hatch -v -e build publish --yes
